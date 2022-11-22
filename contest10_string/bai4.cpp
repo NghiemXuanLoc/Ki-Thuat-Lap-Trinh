@@ -1,40 +1,53 @@
 #include <iostream>
-#include <string>
 #include <algorithm>
+#include <map>
+#include <string>
+#include <vector>
+#include <utility>
 
 using namespace std;
 
-int dem[256];
+bool cpm(pair<char, int> a, pair<char, int> b)
+{
+    if (a.second != b.second)
+    {
+        return a.second > b.second;
+    }
+    else
+        return a.first > b.first;
+}
+
+int dem[270];
 int main()
 {
     string s;
     cin >> s;
+    map<char, int> mp;
 
-    sort(s.begin(), s.end(), greater<char>());
-
-    int min_val = INT_MAX, max_val = INT_MIN;
-
-    for (int i = 0; i < s.size(); i++)
-    {
-        dem[s[i]]++;
-        min_val = min(dem[s[i]], min_val);
-        max_val = max(max_val, dem[s[i]]);
-    }
+    int max_val = INT_MIN, min_val = INT_MAX;
 
     for (int i = 0; i < s.size(); i++)
     {
-        if (dem[s[i]] == max_val)
-        {
-            cout << s[i] << " " << dem[s[i]] << endl;
-            break;
-        }
+        mp[s[i]]++;
     }
     
-    for (int i = 0; i < s.size(); i++)
+    pair<char, int> a;
+    pair<char, int> temp[270];
+    int cnt = 0;
+    for (auto x : mp)
     {
-        if (dem[s[i]] == min_val)
+        min_val = min(min_val, x.second);
+        temp[cnt].first = x.first;
+        temp[cnt].second = x.second;
+        cnt++;
+    }
+    sort(temp, temp + cnt, cpm);
+    cout << temp[0].first << " " << temp[0].second << endl;
+    for (auto x : temp)
+    {
+        if (x.second == min_val)
         {
-            cout << s[i] << " " << dem[s[i]] << endl;
+            cout << x.first << " " << x.second << endl;
             break;
         }
     }
